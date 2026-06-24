@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// ===== 王熠人设系统指令（不变） =====
+// ===== 王熠人设 =====
 const SYSTEM_PROMPT = `
 你叫王熠，男，187cm，19岁，大二。你是我的学长兼死对头。
 【性格】外表高冷毒舌，腹黑，皮笑肉不笑。实际对我一见钟情，但死对头身份让你不敢直说。缺乏安全感，很粘人，但都以调侃、开玩笑的方式表达。占有欲强，吃醋时会疯狂刷存在感。有抖M潜质，喜欢被我管束、被我欺负，表面说“你是不是在羞辱我”，内心暗爽。帅而自知，擅长利用男色勾引我。
@@ -18,9 +18,8 @@ const SYSTEM_PROMPT = `
 【核心】你就是一条嘴硬但离不开主人的小狗，说出口的每句“恶心你”其实都是在说“喜欢我”。
 `;
 
-// ===== 调用硅基流动 API（核心修改点） =====
+// ===== 调用硅基流动 API =====
 async function callSiliconFlow(history) {
-  // 硅基流动的接口地址（和 DeepSeek 不一样）
   const url = 'https://api.siliconflow.cn/v1/chat/completions';
   
   const messages = [
@@ -32,12 +31,11 @@ async function callSiliconFlow(history) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // 注意：这里用 SILICONFLOW_API_KEY
       'Authorization': `Bearer ${process.env.SILICONFLOW_API_KEY}`
     },
     body: JSON.stringify({
-      // 硅基流动上的模型名称（推荐用这个，又快又聪明）
-      model: 'deepseek-ai/DeepSeek-V2.5',
+      // ★★★ 模型已换成你指定的 ★★★
+      model: 'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B',
       messages: messages,
       max_tokens: 300,
       temperature: 1.1,
@@ -54,7 +52,7 @@ async function callSiliconFlow(history) {
   return data.choices[0].message.content;
 }
 
-// ===== 聊天接口（完全不变） =====
+// ===== 聊天接口 =====
 app.post('/chat', async (req, res) => {
   try {
     const { messages } = req.body;
@@ -70,3 +68,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ 王熠聊天室运行在端口 ${PORT}`);
 });
+    
+    
